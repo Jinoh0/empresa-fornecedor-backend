@@ -1,24 +1,23 @@
-# empresa_fornecedor_frontend
 
-## Project setup
-```
-npm install
-```
+### `README.md` para o Front-end
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+```markdown
+# EmpresaFornecedor Front-end
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Tecnologias Utilizadas
+- **Front-end**: Vue.js
+- **Serviços**: Axios para requisições HTTP
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Configuração
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Pré-requisitos
+Certifique-se de ter o [Node.js](https://nodejs.org/) e [npm](https://www.npmjs.com/) instalados.
+
+### Passos para Configuração
+
+1. **Clone o Repositório**
+   ```bash
+   git clone <URL_DO_REPOSITORIO>
+   cd empresa-fornecedor-frontend
+   npm install
+   npm run serve
