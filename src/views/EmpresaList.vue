@@ -5,24 +5,27 @@
     <div v-if="showAddEmpresaModal">
       <h2>Adicionar Empresa</h2>
       <form @submit.prevent="addEmpresa">
-        <input v-model="newEmpresa.nomeFantasia" placeholder="Nome Fantasia" required />
-        <input v-model="newEmpresa.cnpj" placeholder="CNPJ" required />
-        <input v-model="newEmpresa.cep" placeholder="CEP" required />
+        <input
+          v-model="newEmpresa.NomeFantasia"
+          placeholder="Nome Fantasia"
+          required
+        />
+        <input v-model="newEmpresa.CNPJ" placeholder="CNPJ" required />
+        <input v-model="newEmpresa.CEP" placeholder="CEP" required />
         <button type="submit">Adicionar</button>
         <button @click="showAddEmpresaModal = false">Cancelar</button>
       </form>
     </div>
     <ul>
-      <li v-for="empresa in empresas" :key="empresa.id">
-        {{ empresa.nomeFantasia }} - {{ empresa.cnpj }}
-        <button @click="deleteEmpresa(empresa.id)">Deletar</button>
+      <li v-for="empresa in empresas" :key="empresa.empresaId">
+        {{ empresa.nomeFantasia }} - {{ empresa.CNPJ }}
+        <button @click="deleteEmpresa(empresa.empresaId)">Deletar</button>
       </li>
     </ul>
   </div>
 </template>
-
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
@@ -30,41 +33,68 @@ export default {
       empresas: [],
       showAddEmpresaModal: false,
       newEmpresa: {
-        nomeFantasia: '',
-        cnpj: '',
-        cep: ''
-      }
+        CNPJ: "",
+        NomeFantasia: "",
+        CEP: "",
+      },
     };
   },
   methods: {
     async fetchEmpresas() {
       try {
-        const response = await axios.get('http://localhost:5000/api/empresa');
+        const response = await axios.get("http://localhost:5000/api/empresas");
         this.empresas = response.data;
       } catch (error) {
-        console.error(error);
+        console.error(
+          "Error fetching empresas:",
+          error.response || error.message
+        );
       }
     },
     async addEmpresa() {
+      console.log(this.newEmpresa);
       try {
-        await axios.post('http://localhost:5000/api/empresa', this.newEmpresa);
+        await axios.post("http://localhost:5000/api/empresas", {
+          NomeFantasia: this.newEmpresa.NomeFantasia,
+          CNPJ: this.newEmpresa.CNPJ,
+          CEP: this.newEmpresa.CEP,
+          Fornecedores: [],
+        });
         this.fetchEmpresas();
         this.showAddEmpresaModal = false;
+        // Reset newEmpresa data after adding
+        this.newEmpresa = {
+          NomeFantasia: "",
+          CNPJ: "",
+          CEP: "",
+          Fornecedores: [],
+        };
       } catch (error) {
-        console.error(error);
+        console.error(
+          "Error adding empresa:",
+          error.response ? error.response.data : error.message
+        );
       }
     },
     async deleteEmpresa(id) {
+      console.log(id)
+      if (!id) {
+        console.error("Invalid ID");
+        return;
+      }
       try {
-        await axios.delete(`http://localhost:5000/api/empresa/${id}`);
+        await axios.delete(`http://localhost:5000/api/empresas/${id}`);
         this.fetchEmpresas();
       } catch (error) {
-        console.error(error);
+        console.error(
+          "Error deleting empresa:",
+          error.response ? error.response.data : error.message
+        );
       }
-    }
+    },
   },
   created() {
     this.fetchEmpresas();
-  }
+  },
 };
 </script>
